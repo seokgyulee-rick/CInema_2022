@@ -1,44 +1,36 @@
-import Button from "./Button";
-import styles from "./App.module.css";
 import { useState, useEffect } from "react";
 
 function App() {
-  const Hello = () => {
-    useEffect(() => {
-      console.log("hi");
-      return () => console.log("bye");
-    }, []);
-    return <h1 className={styles.title}>Hello! welcome</h1>;
+  const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState([]);
+  const onChange = (event) => {
+    setTodo(event.target.value);
   };
-  const [counter, setCounter] = useState(0);
-  const [keyWord, setKeyWord] = useState("");
-  const [showing, setShowing] = useState(false);
-  const onClick2 = () => setShowing((prev) => !prev);
-  const onClick = () => setCounter((prev) => prev + 1);
-  console.log("i run all the time");
-  const onChange = (event) => setKeyWord(event.target.value);
-  const iroo = () => {
-    console.log(" i run only once ");
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (todo === "") return;
+    setTodos((currentArray) => [todo, ...currentArray]);
+    setTodo("");
   };
-  useEffect(iroo, []);
-  useEffect(() => {
-    if (keyWord !== "" && keyWord.length > 4) {
-      console.log("SEARCH FOR", keyWord);
-    }
-  }, [keyWord]);
+  // console.log(todos);
   return (
     <div>
-      {showing ? <Hello /> : null}
-      <button onClick={onClick2}>{showing ? "Hide" : "Show"}</button>
-      <input
-        value={keyWord}
-        onChange={onChange}
-        type="text"
-        placeholder="Search here..."
-      ></input>
-      <h4>{counter}</h4>
-      <Button text="button text" />
-      <button onClick={onClick}> click </button>
+      <h1>My ToDos : {todos.length}</h1>
+      <form onSubmit={onSubmit}>
+        <input
+          value={todo}
+          onChange={onChange}
+          type="text"
+          placeholder="Write your ToDo"
+        ></input>
+        <button>Add To do</button>
+      </form>
+      <hr />
+      <ul>
+        {todos.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
     </div>
   );
 }
